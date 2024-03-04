@@ -57,7 +57,9 @@ def _get_or_create_schema_type(member: str,
             return SchemaBasicDataType(DataType.INTEGER)
         case str():
             return SchemaBasicDataType(DataType.STRING)
-        case _ if mvalue is None:
+        case _ if mvalue is None :
+            return SchemaBasicDataType(DataType.STRING)
+        case list() if len(mvalue) == 0:
             return SchemaBasicDataType(DataType.STRING)
         case list():
             item_name = member + "Item"
@@ -65,7 +67,7 @@ def _get_or_create_schema_type(member: str,
             while item_name in schema_dict:
                 item_name = member + "Item" + str(count)
                 count += 1
-            schema_item = mvalue[0] if len(mvalue) > 0 else None
+            schema_item = mvalue[0]
             item_type = _get_or_create_schema_type(item_name, schema_item, schema_dict, date_format)
             return SchemaListDataType(item_type)
         case _:

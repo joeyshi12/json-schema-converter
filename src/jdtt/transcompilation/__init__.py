@@ -1,8 +1,8 @@
-from jdtt.transcompilation.python_transcompilation import \
+from jdtt.transcompilation._python_transcompilation import \
     schemas_to_python
-from jdtt.transcompilation.scala_transcompilation import \
+from jdtt.transcompilation._scala_transcompilation import \
     schemas_to_scala
-from jdtt.transcompilation.typescript_transcompilation import \
+from jdtt.transcompilation._typescript_transcompilation import \
     schemas_to_typescript
-from jdtt.transcompilation.transcompilation import \
+from jdtt.transcompilation._transcompilation import \
     transcompile, json_to_schemas

@@ -1,3 +1,4 @@
+import re
 from jdtt.schema import Schema, SchemaDataType, SchemaBasicDataType, \
     SchemaListDataType, SchemaReference, SchemaListDataType, DataType
 
