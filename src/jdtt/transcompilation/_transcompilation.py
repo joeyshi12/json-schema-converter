@@ -56,7 +56,7 @@ def _get_or_create_schema_type(key: str,
                                sanitize_symbols: bool = False) -> SchemaDataType:
     """Returns the type of the given value, creating a new schema if necessary."""
     match value:
-        case str() if date_format is not None and _is_valid_date(value, date_format):
+        case str() if date_format is not None and re.fullmatch(date_format, value):
             return SchemaBasicDataType(DataType.DATE)
         case bool():
             return SchemaBasicDataType(DataType.BOOLEAN)
@@ -91,18 +91,3 @@ def _sanitize_symbol(key: str) -> str:
     if sanitized_key[0].isdigit():
         sanitized_key = "_" + sanitized_key
     return sanitized_key
-
-
-def _is_valid_date(date_string: str, format_string: str) -> bool:
-    regex_pattern = {
-        "%Y": r"\d{4}",
-        "%m": r"\d{2}",
-        "%d": r"\d{2}",
-        "%H": r"\d{2}",
-        "%M": r"\d{2}",
-        "%S": r"\d{2}"
-    }
-    regex_string = format_string
-    for key, value in regex_pattern.items():
-        regex_string = regex_string.replace(key, value)
-    return bool(re.fullmatch(regex_string, date_string))

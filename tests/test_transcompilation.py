@@ -15,10 +15,10 @@ def test_empty():
     assert len(schema.fields) == 0
 
 
-def test_single_field():
+def test_int_field():
     json_dict = {"num": 0}
     schema_name = "Test"
-    schema_dict = json_to_schemas({"num": 0}, schema_name=schema_name)
+    schema_dict = json_to_schemas(json_dict, schema_name=schema_name)
     assert len(schema_dict) == 1
 
     schema = schema_dict[schema_name]
@@ -28,6 +28,36 @@ def test_single_field():
     field = schema.fields[0]
     assert field.name == "num"
     assert field.data_type == SchemaBasicDataType(DataType.INTEGER)
+
+
+def test_date_field():
+    json_dict = {"date": "2000-01-01"}
+    schema_name = "Test"
+    schema_dict = json_to_schemas(json_dict, schema_name=schema_name, date_format=r"\d{4}-\d{2}-\d{2}")
+    assert len(schema_dict) == 1
+
+    schema = schema_dict[schema_name]
+    assert schema.name == schema_name
+    assert len(schema.fields) == 1
+
+    field = schema.fields[0]
+    assert field.name == "date"
+    assert field.data_type == SchemaBasicDataType(DataType.DATE)
+
+
+def test_sanitization():
+    json_dict = {"0-user@email": None}
+    schema_name = "Test"
+    schema_dict = json_to_schemas(json_dict, schema_name=schema_name, sanitize_symbols=True)
+    assert len(schema_dict) == 1
+
+    schema = schema_dict[schema_name]
+    assert schema.name == schema_name
+    assert len(schema.fields) == 1
+
+    field = schema.fields[0]
+    assert field.name == "_0_user_email"
+    assert field.data_type == SchemaBasicDataType(DataType.UNKNOWN)
 
 
 def test_multiple_fields():

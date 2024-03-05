@@ -10,7 +10,7 @@ def main():
     parser.add_argument("-l", "--language", type=str, choices=["python", "typescript", "java", "scala"], default="python", help="target language for transpilation")
     parser.add_argument("-n", "--schema_name", type=str, default="Schema", help="name of the schema")
     parser.add_argument("-s", "--sanitize_symbols", action="store_true", help="sanitize symbol names in schema")
-    parser.add_argument("-d", "--date_format", type=str, help="include to infer datetime fields")
+    parser.add_argument("-d", "--date_format", type=str, help="regex for detecting date fields")
     parser.add_argument("json_file", type=argparse.FileType("r"), nargs="?", help="JSON filepath")
     args = parser.parse_args()
 
