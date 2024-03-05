@@ -38,11 +38,10 @@ def _json_to_schemas(name: str,
                      schema_dict: dict[str, Schema],
                      date_format: Optional[str] = None,
                      sanitize_symbols: bool = False) -> dict[str, Schema]:
-    sanitized_name = _sanitize_symbol(name) if sanitize_symbols else name
     if not isinstance(schema_json, dict) or sanitized_name in schema_dict:
         return schema_dict
-    schema = Schema(sanitized_name, [])
-    schema_dict[sanitized_name] = schema
+    schema = Schema(name, [])
+    schema_dict[name] = schema
     for key, value in schema_json.items():
         sanitized_key = _sanitize_symbol(key) if sanitize_symbols else key
         schema_type = _get_or_create_schema_type(sanitized_key, value, schema_dict, date_format, sanitize_symbols)
