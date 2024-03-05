@@ -38,7 +38,7 @@ def _json_to_schemas(name: str,
                      schema_dict: dict[str, Schema],
                      date_format: Optional[str] = None,
                      sanitize_symbols: bool = False) -> dict[str, Schema]:
-    if not isinstance(schema_json, dict) or sanitized_name in schema_dict:
+    if not isinstance(schema_json, dict) or name in schema_dict:
         return schema_dict
     schema = Schema(name, [])
     schema_dict[name] = schema
