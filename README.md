@@ -6,6 +6,12 @@ CLI tool for transpiling JSON into a programming language data model.
 
 A web interface for using this library is provided at <a href="https://devtools.joeyshi.xyz/jdtt">devtools.joeyshi.xyz/jdtt</a>
 
+## Installation
+
+```
+pip3 install jdtt
+```
+
 ## Usage
 
 ```
