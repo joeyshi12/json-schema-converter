@@ -5,8 +5,10 @@ from dataclasses import dataclass
 class DataType(Enum):
     BOOLEAN = 1
     INTEGER = 2
-    STRING = 3
-    DATE = 4
+    FLOAT = 3
+    STRING = 4
+    DATE = 5
+    UNKNOWN = 6
 
 
 class SchemaDataType:

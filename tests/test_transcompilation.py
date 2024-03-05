@@ -33,9 +33,11 @@ def test_single_field():
 def test_multiple_fields():
     json_dict = {
         "num": 0,
+        "decimal": 0.1,
         "text": "",
         "check": False,
         "nums": [0, 1, 2],
+        "empty": [],
         "obj": {},
         "objs": [{}]
     }
@@ -47,11 +49,13 @@ def test_multiple_fields():
 
     schema = schema_dict[schema_name]
     assert schema.name == schema_name
-    assert len(schema.fields) == 6
+    assert len(schema.fields) == 8
 
     assert schema.fields[0] == SchemaField("num", SchemaBasicDataType(DataType.INTEGER))
-    assert schema.fields[1] == SchemaField("text", SchemaBasicDataType(DataType.STRING))
-    assert schema.fields[2] == SchemaField("check", SchemaBasicDataType(DataType.BOOLEAN))
-    assert schema.fields[3] == SchemaField("nums", SchemaListDataType(SchemaBasicDataType(DataType.INTEGER)))
-    assert schema.fields[4] == SchemaField("obj", SchemaReference("obj"))
-    assert schema.fields[5] == SchemaField("objs", SchemaListDataType(SchemaReference("objsItem")))
+    assert schema.fields[1] == SchemaField("decimal", SchemaBasicDataType(DataType.FLOAT))
+    assert schema.fields[2] == SchemaField("text", SchemaBasicDataType(DataType.STRING))
+    assert schema.fields[3] == SchemaField("check", SchemaBasicDataType(DataType.BOOLEAN))
+    assert schema.fields[4] == SchemaField("nums", SchemaListDataType(SchemaBasicDataType(DataType.INTEGER)))
+    assert schema.fields[5] == SchemaField("empty", SchemaListDataType(SchemaBasicDataType(DataType.UNKNOWN)))
+    assert schema.fields[6] == SchemaField("obj", SchemaReference("obj"))
+    assert schema.fields[7] == SchemaField("objs", SchemaListDataType(SchemaReference("objsItem")))

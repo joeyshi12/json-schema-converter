@@ -5,7 +5,7 @@ from jdtt.schema import Schema, SchemaDataType, SchemaBasicDataType, \
 
 def schemas_to_python(schema_dict: dict[str, Schema]) -> str:
     schema_str_list = [_schema_to_python(schema) for _, schema in schema_dict.items()]
-    import_statements_str = "import datetime\nfrom dataclasses import dataclass\n\n"
+    import_statements_str = "from datetime import datetime\nfrom dataclasses import dataclass\n\n"
     return import_statements_str + "\n\n".join(schema_str_list)
 
 
@@ -35,9 +35,11 @@ def _get_data_type_symbol(data_type: DataType) -> str:
             return "bool"
         case DataType.INTEGER:
             return "int"
+        case DataType.FLOAT:
+            return "float"
         case DataType.STRING:
             return "str"
         case DataType.DATE:
-            return "datetime.datetime"
+            return "datetime"
         case _:
-            raise Exception("Invalid data type: " + data_type)
+            return "object"

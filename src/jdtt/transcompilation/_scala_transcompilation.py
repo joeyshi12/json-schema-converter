@@ -34,9 +34,11 @@ def _get_data_type_symbol(data_type: DataType) -> str:
             return "Boolean"
         case DataType.INTEGER:
             return "Int"
+        case DataType.INTEGER:
+            return "Float"
         case DataType.STRING:
             return "String"
         case DataType.DATE:
             return "DateTime"
         case _:
-            raise Exception("Invalid data type: " + data_type)
+            return "Any"
