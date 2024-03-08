@@ -11,7 +11,7 @@ def schemas_to_scala(schema_dict: dict[str, Schema]):
 def _schema_to_scala(schema: Schema) -> str:
     field_str_list = []
     for field in schema.fields:
-        field_str_list.append(f"    {field.name}: {_get_type_symbol(field.data_type)}")
+        field_str_list.append(f"    {field.name}: {_get_type_symbol(field.data_type)},")
     fields_str = "\n".join(field_str_list)
     return f"case class {schema.name}(\n{fields_str}\n)"
 
