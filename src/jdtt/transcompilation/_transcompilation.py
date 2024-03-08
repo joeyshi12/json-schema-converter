@@ -4,6 +4,7 @@ from jdtt.schema import Schema, SchemaField, SchemaBasicDataType, \
         SchemaDataType, SchemaListDataType, SchemaReference, DataType
 from jdtt.transcompilation import schemas_to_python, schemas_to_typescript, \
         schemas_to_java, schemas_to_scala
+from jdtt.exceptions import JDTTException
 
 
 def transcompile(schema_json: dict,
@@ -22,7 +23,7 @@ def transcompile(schema_json: dict,
         case "scala":
             return schemas_to_scala(schema_dict)
         case _:
-            raise Exception("Invalid target language " + target_language)
+            raise JDTTException(f"Unsupported target language {target_language}")
 
 
 def json_to_schemas(schema_json: dict,

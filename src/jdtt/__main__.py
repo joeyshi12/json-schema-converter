@@ -31,11 +31,13 @@ def main():
                 args.sanitize_symbols
             )
             sys.stdout.write(result)
-            return
+            sys.exit(0)
         except Exception as e:
-            pass
+            sys.stderr.write(f"jdtt: {e}\n")
+            sys.exit(1)
 
-    sys.stderr.write(f"Failed to transpile JSON object {json_path}")
+    sys.stderr.write("jdtt: failed to read file\n")
+    sys.exit(1)
 
 
 if __name__ == "__main__":

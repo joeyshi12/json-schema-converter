@@ -1,0 +1,2 @@
+class JDTTException(Exception):
+    pass
