@@ -29,7 +29,7 @@ def _schema_to_python(schema: Schema) -> str:
     return f"@dataclass\nclass {schema.name}:\n{fields_str}"
 
 
-def schemas_to_typescript(schema_dict: dict[str, Schema]):
+def schemas_to_typescript(schema_dict: dict[str, Schema]) -> str:
     schema_str_list = [_schema_to_typescript(schema) for _, schema in schema_dict.items()]
     return "\n\n".join(schema_str_list)
 
@@ -54,7 +54,7 @@ def _schema_to_typescript(schema: Schema) -> str:
     return f"export interface {schema.name} {{{fields_str}}}"
 
 
-def schemas_to_java(schema_dict: dict[str, Schema]):
+def schemas_to_java(schema_dict: dict[str, Schema]) -> str:
     schema_str_list = [_schema_to_java(schema) for _, schema in schema_dict.items()]
     import_statements_str = "import java.util.Date\n\n"
     return import_statements_str + "\n\n".join(schema_str_list)
@@ -80,7 +80,7 @@ def _schema_to_java(schema: Schema) -> str:
     return f"class {schema.name} {{{fields_str}}}"
 
 
-def schemas_to_scala(schema_dict: dict[str, Schema]):
+def schemas_to_scala(schema_dict: dict[str, Schema]) -> str:
     schema_str_list = [_schema_to_scala(schema) for _, schema in schema_dict.items()]
     import_statements_str = "import org.joda.time.DateTime\n\n"
     return import_statements_str + "\n\n".join(schema_str_list)
@@ -104,6 +104,32 @@ def _schema_to_scala(schema: Schema) -> str:
 
     fields_str = "\n" + ",\n".join(field_str_list) + "\n" if len(field_str_list) > 0 else ""
     return f"case class {schema.name}({fields_str})"
+
+
+def schemas_to_proto(schema_dict: dict[str, Schema]) -> str:
+    schema_str_list = [_schema_to_proto(schema) for _, schema in schema_dict.items()]
+    import_statements_str = "syntax = proto3\n\nimport \"google/protobuf/any.proto\"\n\n"
+    return import_statements_str + "\n\n".join(schema_str_list)
+
+
+def _schema_to_proto(schema: Schema) -> str:
+    data_type_to_symbol = {
+        DataType.BOOLEAN: "bool",
+        DataType.INTEGER: "int32",
+        DataType.FLOAT: "float",
+        DataType.STRING: "string",
+        DataType.DATE: "int64",
+        DataType.UNKNOWN: "google.protobuf.Any"
+    }
+    list_formatter = "repeated {}"
+    field_str_list = []
+
+    for index, field in enumerate(schema.fields):
+        type_symbol = _get_type_symbol(field.data_type, data_type_to_symbol, list_formatter)
+        field_str_list.append(f"  {type_symbol} {field.name} = {index + 1};")
+
+    fields_str = "\n" + "\n".join(field_str_list) + "\n" if len(field_str_list) > 0 else ""
+    return f"message {schema.name} {{{fields_str}}}"
 
 
 def _get_type_symbol(schema_type: SchemaDataType,

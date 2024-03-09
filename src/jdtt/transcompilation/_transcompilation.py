@@ -3,7 +3,7 @@ from typing import Optional
 from jdtt.schema import Schema, SchemaField, SchemaBasicDataType, \
         SchemaDataType, SchemaListDataType, SchemaReference, DataType
 from jdtt.transcompilation import schemas_to_python, schemas_to_typescript, \
-        schemas_to_java, schemas_to_scala
+        schemas_to_java, schemas_to_scala, schemas_to_proto
 from jdtt.exceptions import JDTTException
 
 
@@ -12,6 +12,7 @@ def transcompile(schema_json: dict,
                  date_format: Optional[str] = None,
                  schema_name: str = "Schema",
                  sanitize_symbols: bool = False) -> str:
+    """Transcompiles JSON object to a data model for the target language"""
     schema_dict = json_to_schemas(schema_json, date_format, schema_name, sanitize_symbols)
     match target_language:
         case "python":
@@ -22,23 +23,27 @@ def transcompile(schema_json: dict,
             return schemas_to_java(schema_dict)
         case "scala":
             return schemas_to_scala(schema_dict)
+        case "proto":
+            return schemas_to_proto(schema_dict)
         case _:
             raise JDTTException(f"Unsupported target language {target_language}")
 
 
-def json_to_schemas(schema_json: dict,
+def json_to_schemas(schema_json,
                     date_format: Optional[str] = None,
                     schema_name: str = "Schema",
                     sanitize_symbols: bool = False) -> dict[str, Schema]:
-    """Infers a language data type schema from the given JSON object."""
+    """Infers a language data type schema from the given JSON object"""
+    if not isinstance(schema_json, dict):
+        schema_json = {"InnerContent": schema_json}
     return _json_to_schemas(schema_name, schema_json, {}, date_format, sanitize_symbols)
 
 
 def _json_to_schemas(name: str,
                      schema_json,
                      schema_dict: dict[str, Schema],
-                     date_format: Optional[str] = None,
-                     sanitize_symbols: bool = False) -> dict[str, Schema]:
+                     date_format: Optional[str],
+                     sanitize_symbols: bool) -> dict[str, Schema]:
     if not isinstance(schema_json, dict) or name in schema_dict:
         return schema_dict
     schema = Schema(name, [])
@@ -53,9 +58,9 @@ def _json_to_schemas(name: str,
 def _get_or_create_schema_type(key: str,
                                value,
                                schema_dict: dict[str, Schema],
-                               date_format: Optional[str] = None,
-                               sanitize_symbols: bool = False) -> SchemaDataType:
-    """Returns the type of the given value, creating a new schema if necessary."""
+                               date_format: Optional[str],
+                               sanitize_symbols: bool) -> SchemaDataType:
+    """Returns the type of the given value, creating a new schema if necessary"""
     match value:
         case str() if date_format is not None and re.fullmatch(date_format, value):
             return SchemaBasicDataType(DataType.DATE)

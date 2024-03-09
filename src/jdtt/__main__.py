@@ -7,18 +7,17 @@ from jdtt.transcompilation import transcompile
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-l", "--language", type=str, choices=["python", "typescript", "java", "scala"], default="python", help="target language for transcompilation")
+    parser.add_argument("-l", "--language", type=str, choices=["python", "typescript", "java", "scala", "proto"], default="python", help="target language for transcompilation")
     parser.add_argument("-n", "--schema_name", type=str, default="Schema", help="name of the schema")
     parser.add_argument("-s", "--sanitize_symbols", action="store_true", help="sanitize symbol names in schema")
     parser.add_argument("-d", "--date_format", type=str, help="regex for detecting date fields from string fields")
     parser.add_argument("json_file", type=argparse.FileType("r"), nargs="?", help="JSON filepath")
     args = parser.parse_args()
 
-    if args.json_file is None and not select.select([sys.stdin, ], [], [], 0.0)[0]:
+    json_file = args.json_file if sys.stdin.isatty() else sys.stdin
+    if json_file is None:
         parser.print_help()
-        return
-
-    json_file = sys.stdin if args.json_file is None else args.json_file
+        sys.exit(1)
 
     with json_file as f:
         try:
