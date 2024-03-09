@@ -83,7 +83,7 @@ def _get_or_create_schema_type(key: str,
                 item_name = key + "Item" + str(count)
                 count += 1
             schema_item = value[0]
-            item_type = _get_or_create_schema_type(item_name, schema_item, schema_dict, date_format)
+            item_type = _get_or_create_schema_type(item_name, schema_item, schema_dict, date_format, sanitize_symbols)
             return SchemaListDataType(item_type)
         case _:
             _json_to_schemas(key, value, schema_dict, date_format, sanitize_symbols)
