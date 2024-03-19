@@ -1,6 +1,8 @@
 # json-data-type-transcompiler
 
 ![pytest.yml](https://github.com/joeyshi12/json-data-type-transcompiler/actions/workflows/pytest.yml/badge.svg)
+![python-publish.yml](https://github.com/joeyshi12/json-data-type-transcompiler/actions/workflows/python-publish.yml/badge.svg)
+![PyPI](https://img.shields.io/pypi/v/jdtt)
 
 CLI tool for transpiling JSON into a programming language data model.
 
